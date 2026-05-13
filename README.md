@@ -49,7 +49,7 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/your-username/enterprise-rag-knowledge-base.git
+git clone https://github.com/1402605737-create/enterprise-rag-knowledge-base-.git
 cd enterprise-rag-knowledge-base
 ```
 
