@@ -2,15 +2,14 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements-light.txt .
+RUN pip install --no-cache-dir -r requirements-light.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-COPY backend/ ./backend/
+COPY backend/app.py .
 COPY data/ ./data/
-COPY scripts/ ./scripts/
 
-RUN mkdir -p uploads chroma_db
+RUN mkdir -p /tmp/uploads
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "app.py"]
