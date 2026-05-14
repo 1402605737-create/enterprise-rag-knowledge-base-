@@ -47,7 +47,29 @@ def _load_kb_registry():
             data = json.load(f)
             knowledge_bases.update(data)
 
+
+def _auto_init_demo_kb():
+    """Auto-create demo KB with sample documents on first startup."""
+    if "demo" in knowledge_bases:
+        return
+    sample_dir = os.path.join(PROJECT_ROOT, "data", "sample-docs")
+    if not os.path.isdir(sample_dir):
+        return
+    knowledge_bases["demo"] = {"name": "云帆科技知识库", "description": "企业示例知识库（自动初始化）"}
+    _persist_kb_registry()
+    vs = get_vector_store()
+    bm25 = get_bm25()
+    for filename in sorted(os.listdir(sample_dir)):
+        if not allowed_file(filename):
+            continue
+        file_path = os.path.join(sample_dir, filename)
+        chunks = ingest_file(file_path, "demo")
+        vs.add_chunks(chunks)
+        for chunk in chunks:
+            bm25.add(chunk)
+
 _load_kb_registry()
+_auto_init_demo_kb()
 
 
 class CreateKBRequest(BaseModel):
