@@ -48,6 +48,10 @@ def _load_kb_registry():
             knowledge_bases.update(data)
 
 
+import threading
+
+# ... existing imports ...
+
 def _auto_init_demo_kb():
     """Auto-create demo KB with sample documents on first startup."""
     if "demo" in knowledge_bases:
@@ -69,7 +73,7 @@ def _auto_init_demo_kb():
             bm25.add(chunk)
 
 _load_kb_registry()
-_auto_init_demo_kb()
+threading.Thread(target=_auto_init_demo_kb, daemon=True).start()
 
 
 class CreateKBRequest(BaseModel):
