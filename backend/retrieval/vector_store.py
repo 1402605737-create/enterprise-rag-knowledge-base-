@@ -1,9 +1,9 @@
 from typing import List, Optional
 import chromadb
 from chromadb.config import Settings as ChromaSettings
-from sentence_transformers import SentenceTransformer
+from openai import OpenAI
 
-from config import CHROMA_PERSIST_DIR, EMBEDDING_MODEL, EMBEDDING_DEVICE
+from config import CHROMA_PERSIST_DIR, EMBEDDING_BASE_URL, EMBEDDING_MODEL, LLM_API_KEY
 from models import DocumentChunk, SearchResult
 
 COLLECTION_NAME = "knowledge_base"
@@ -19,20 +19,20 @@ class VectorStore:
             name=COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
         )
-        self._embedding_model: Optional[SentenceTransformer] = None
+        self._embedding_client: Optional[OpenAI] = None
 
-    def _get_embedding_model(self) -> SentenceTransformer:
-        if self._embedding_model is None:
-            self._embedding_model = SentenceTransformer(
-                EMBEDDING_MODEL,
-                device=EMBEDDING_DEVICE,
+    def _get_embedding_client(self) -> OpenAI:
+        if self._embedding_client is None:
+            self._embedding_client = OpenAI(
+                base_url=EMBEDDING_BASE_URL,
+                api_key=LLM_API_KEY,
             )
-        return self._embedding_model
+        return self._embedding_client
 
     def _embed(self, texts: List[str]) -> List[List[float]]:
-        model = self._get_embedding_model()
-        embeddings = model.encode(texts, normalize_embeddings=True)
-        return embeddings.tolist()
+        client = self._get_embedding_client()
+        resp = client.embeddings.create(model=EMBEDDING_MODEL, input=texts)
+        return [d.embedding for d in resp.data]
 
     def add_chunks(self, chunks: List[DocumentChunk]):
         if not chunks:
