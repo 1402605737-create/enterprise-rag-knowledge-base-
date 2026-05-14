@@ -111,7 +111,10 @@ class ChatRequest(BaseModel):
 
 @app.get("/api/v1/health")
 async def health():
-    return {"status": "ok", "documents": len(documents), "version": "2.0-light"}
+    debug_dir = str(PROJECT_ROOT / "data" / "sample-docs")
+    exists = os.path.isdir(debug_dir)
+    files = os.listdir(debug_dir) if exists else []
+    return {"status": "ok", "documents": len(documents), "version": "2.0-light", "data_dir": debug_dir, "data_exists": exists, "data_files": len(files)}
 
 
 @app.post("/api/v1/chat")
