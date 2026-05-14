@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from openai import OpenAI
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent
 load_dotenv(PROJECT_ROOT / "backend" / ".env")
 
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.deepseek.com/v1")
