@@ -3,7 +3,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 COPY backend/requirements-light.txt .
-RUN pip install --no-cache-dir -r requirements-light.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --no-cache-dir -r requirements-light.txt 
 
 COPY backend/app.py .
 COPY data/ ./data/
