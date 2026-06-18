@@ -6,7 +6,7 @@
 | 产品名称 | Enterprise RAG Knowledge Base（企业RAG知识库） |
 | 版本 | v1.0 MVP |
 | 作者 | AI产品经理作品集项目 |
-| 编写日期 | 2024年 |
+| 编写日期 | 2026年 |
 
 ---
 
